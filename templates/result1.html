@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Styled Card</title>
+  <style>
+    /* Basic reset */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-color: #f0f2f5;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Card Container */
+    .card {
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+      width: 400px; /* Increased card width */
+      padding: 30px; /* Increased padding */
+      transition: transform 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Card Hover Effects */
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Card content styling */
+    .card div {
+      font-size: 18px; /* Increased font size */
+      color: #333;
+      margin-bottom: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background-color: #f7f7f7;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+
+    /* Animated Background Change on Hover */
+    .card div:hover {
+      background-color: #e8f4ff;
+      transform: scale(1.05);
+    }
+
+    /* Individual content styling */
+    .card div:first-of-type {
+      font-weight: bold;
+      color: #e57373;
+    }
+    .card div:nth-of-type(2) {
+      font-weight: bold;
+      color: #81c784;
+    }
+    .card div:last-of-type {
+      font-size: 16px; /* Increased font size */
+      color: #9e9e9e;
+    }
+    .button-container {
+      display: flex;
+      justify-content: center;
+      margin: 20px;
+      font-family: Arial, sans-serif;
+  }
+
+  .return-button {
+      position: relative;
+      padding: 12px 24px;
+      background: linear-gradient(to right, #2196F3, #1976D2);
+      border: none;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.3s ease;
+  }
+
+  .return-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: all 0.5s ease;
+  }
+
+  .return-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+  }
+
+  .return-button:hover::before {
+      left: 100%;
+  }
+
+  .return-button a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+  }
+
+  /* Optional: Add an arrow icon */
+  .return-button a::before {
+      content: '←';
+      font-size: 18px;
+  }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div>Before Compression: {{result1[0]}} KB</div>
+    <div>After Compression: {{result1[1]}} KB</div>
+    <div>Dimensions: {{result1[2]}} x {{result1[3]}} px</div>
+    <div class="button-container">
+      <button class="return-button">
+          <a href="http://127.0.0.1:5000/filecompressor">Return</a>
+      </button>
+  </div>
+  </div>
+  <div id="video-container">
+    <canvas id="my_canvas" width="800" height="500"></canvas>
+    <div class="stats" style="margin-left:50px">
+        Original Size: <span id="original-size">{{result1[0]}}</span> KB | 
+        Compressed Size: <span id="compressed-size">{{result1[1]}}</span> KB | 
+        Compression Ratio: <span id="compression-ratio"></span>%
+    </div>
+  </div>
+  <script>
+    const canvas = document.getElementById('my_canvas');
+    const ctx = canvas.getContext('2d');
+    const originalSizeSpan = document.getElementById('original-size');
+    const compressedSizeSpan = document.getElementById('compressed-size');
+    const compressionRatioSpan = document.getElementById('compression-ratio');
+    const compressionRatio = (({{result1[0]}} - {{result1[1]}}) / {{result1[0]}} * 100);
+    const originalSize={{result1[0]}};
+    const compressedSize={{result1[1]}};
+    originalSizeSpan.textContent = originalSize.toFixed(2);
+    compressedSizeSpan.textContent = compressedSize.toFixed(2);
+    compressionRatioSpan.textContent = compressionRatio.toFixed(1);
+    
+    
+
+    // Graph settings
+    const maxPoints = 100;
+    const padding = 80;
+    const graphWidth = canvas.width - padding * 2;
+    const graphHeight = canvas.height - padding * 2;
+    
+    // Data arrays
+    let compressionData = [];
+    let originalSizes = [];
+    let compressedSizes = [];
+    
+    // Initialize arrays
+    for (let i = 0; i < maxPoints; i++) {
+        ratio={{result1[0]}}/{{result1[1]}};
+        compressionData.push(ratio);
+        originalSizes.push({{result1[0]}});
+        compressedSizes.push({{result1[1]}});
+    }
+
+    function drawGrid() {
+        ctx.strokeStyle = '#ddd';
+        ctx.lineWidth = 0.5;
+        
+        // Vertical lines
+        for (let x = 0; x <= graphWidth; x += graphWidth / 10) {
+            ctx.beginPath();
+            ctx.moveTo(x + padding, padding);
+            ctx.lineTo(x + padding, graphHeight + padding);
+            ctx.stroke();
+        }
+        
+        // Horizontal lines
+        for (let y = 0; y <= graphHeight; y += graphHeight / 10) {
+            ctx.beginPath();
+            ctx.moveTo(padding, y + padding);
+            ctx.lineTo(graphWidth + padding, y + padding);
+            ctx.stroke();
+        }
+    }
+
+    function drawAxis() {
+        ctx.strokeStyle = '#000';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        // Y axis
+        ctx.moveTo(padding, padding-100);
+        ctx.lineTo(padding, graphHeight + padding);
+        
+        // X axis
+        ctx.moveTo(padding, graphHeight + padding);
+        ctx.lineTo(graphWidth + padding, graphHeight + padding);
+        
+        ctx.stroke();
+        
+        // Add labels
+        ctx.fillStyle = '#000';
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'right';
+        
+        // Y axis labels (MB)
+        const maxSize = Math.max(...originalSizes, ...compressedSizes);
+        for (let i = 0; i <= 10; i++) {
+            const value = ((maxSize - (i * maxSize / 10))).toFixed(1) + 'KB';
+            ctx.fillText(value, padding - 5, padding + (graphHeight / 10) * i + 5);
+        }
+        
+        // X axis labels (time)
+        ctx.textAlign = 'center';
+        for (let i = 0; i <= 10; i++) {
+            const value = (i * (maxPoints / 10)).toString() + 's';
+            ctx.fillText(value, padding + (graphWidth / 10) * i, graphHeight + padding + 20);
+        }
+    }
+
+    function drawGraph() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        drawGrid();
+        drawAxis();
+        
+        const maxSize = Math.max(...originalSizes, ...compressedSizes);
+        
+        // Draw original size line
+        ctx.strokeStyle = '#2196F3';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        for (let i = 0; i < originalSizes.length; i++) {
+            const x = padding + (i * graphWidth / maxPoints);
+            const y = padding + graphHeight - (originalSizes[i] * graphHeight / maxSize);
+            
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+        
+        // Draw compressed size line
+        ctx.strokeStyle = '#4CAF50';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        
+        for (let i = 0; i < compressedSizes.length; i++) {
+            const x = padding + (i * graphWidth / maxPoints);
+            const y = padding + graphHeight - (compressedSizes[i] * graphHeight / maxSize);
+            
+            if (i === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+        ctx.stroke();
+        
+        // Add legend
+        ctx.font = '12px Arial';
+        ctx.textAlign = 'left';
+        ctx.fillStyle = '#2196F3';
+        ctx.fillRect(padding, padding - 20, 20, 10);
+        ctx.fillStyle = '#000';
+        ctx.fillText('Original Size', padding + 30, padding - 12);
+        
+        ctx.fillStyle = '#4CAF50';
+        ctx.fillRect(padding + 120, padding - 20, 20, 10);
+        ctx.fillStyle = '#000';
+        ctx.fillText('Compressed Size', padding + 150, padding - 12);
+    }
+
+    function updateData(originalSize, compressedSize) {
+        // Calculate compression ratio
+        const compressionRatio = (({{result1[0]}} - {{result1[1]}}) / {{result1[0]}} * 100);
+        // Update arrays
+        originalSizes.push(originalSize);
+        originalSizes.shift();
+        
+        compressedSizes.push(compressedSize);
+        compressedSizes.shift();
+        
+        compressionData.push(compressionRatio);
+        compressionData.shift();
+        
+        // Update stats
+        originalSizeSpan.textContent = originalSize.toFixed(2);
+        compressedSizeSpan.textContent = compressedSize.toFixed(2);
+        compressionRatioSpan.textContent = compressionRatio.toFixed(1);
+        
+        drawGraph();
+    }
+
+    // Initial draw
+    drawGraph();
+
+    // Function to receive and process file size data
+    function processFileData(originalSize, compressedSize) {
+        updateData(originalSize, compressedSize);
+    }
+  </script>
+
+
+
+</body>
+</html>

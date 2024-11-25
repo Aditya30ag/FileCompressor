@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        background-image: url('static/images/hello2.jpg');
+        background-size: cover;
+        background-repeat: no-repeat;
+        backdrop-filter: blur(3px);
+        color: #fff;
+        overflow: hidden;
+    }
+
+    /* Container Styling */
+    #container {
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(10px);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+        max-width: 500px;
+        width: 100%;
+        animation: fadeIn 1.2s ease-out;
+    }
+
+    /* Heading Styling */
+    h2 {
+        color: #e0e0e0;
+        text-align: center;
+        font-size: 1.8em;
+        margin-bottom: 25px;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Form Styling */
+    label {
+        display: block;
+        font-weight: bold;
+        margin: 10px 0 5px;
+        color: #ccc;
+        font-size: 0.9em;
+    }
+
+    input[type="file"],
+    input[type="text"],
+    select {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        color: #fff;
+        outline: none;
+        transition: all 0.3s ease;
+        font-size: 1em;
+    }
+    input::placeholder {
+        color: #ccc;
+    }
+
+    /* Input and Select Focus Effect */
+    input[type="file"]:focus,
+    input[type="text"]:focus,
+    select:focus {
+        border-color: #ff9800;
+        background: rgba(255, 255, 255, 0.2);
+        box-shadow: 0 4px 8px rgba(255, 152, 0, 0.2);
+    }
+
+    /* Button Styling */
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #fff;
+        background: linear-gradient(135deg, #ff5722, #ff9800);
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    button:hover {
+        background: linear-gradient(135deg, #ff8a50, #ff7043);
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(255, 112, 67, 0.4);
+    }
+    button:active {
+        background: #d84315;
+        box-shadow: 0 4px 8px rgba(216, 67, 21, 0.4);
+        transform: scale(1);
+    }
+
+    /* Progress Bar Styling */
+    .progress {
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        overflow: hidden;
+        margin-top: 15px;
+    }
+    .progress-bar {
+        height: 20px;
+        width: 0%;
+        background-color: #28a745;
+        transition: width 0.4s ease;
+    }
+
+    /* Scroll Bar Styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: #ff5722;
+        border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #ff7043;
+    }
+
+    /* Animation for Fade-In */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Pulse Animation for Heading */
+    .animated {
+        animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+</style>
+<body>
+    <div id="container">
+        <h2 class="animated">File Converter</h2>
+        
+        <!-- Form for compression inputs -->
+        <form id="compressForm" action="/result" method="POST">
+            <label for="inputFile">Choose File to Compress:</label>
+            <input type="file" id="inputFile" name="inputFile" required><br>
+
+            <label for="outputFile">Name for Compressed File:</label>
+            <input type="text" id="outputFile" name="outputFile" placeholder="Enter output file name" required><br>
+
+            <label for="format">Choose Format:</label>
+            <select id="format" name="format">
+                <option value="GZIP" style="color:black">GZIP</option>
+                <option value="ZIP" style="color:black">ZIP</option>
+                <option value="RAR" style="color:black">RAR</option>
+            </select><br>
+
+            <label for="compress/decompress">Compress/Decompress:</label>
+            <select id="compress/decompress" name="compress/decompress">
+                <option value="compress" style="color:black">Compress</option>
+                <option value="decompress" style="color:black">Decompress</option>
+            </select><br>
+            
+            <button type="submit">Convert file</button>
+        </form>
+        <form action="/" style="margin-top:20px">
+            <button type="submit">GO Back</button>
+        </form>
+    </div>
+</body>
+</html>
